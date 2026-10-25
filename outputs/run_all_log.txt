@@ -1,0 +1,450 @@
+
+
+==================== R/01_clean.R ====================
+
+Summary: 20 of 20 packages are loaded and ready.
+Raw file: 999 rows x 78 columns
+After dropping empty rows/columns: 134 rows x 3 columns
+
+--- Data checks ---
+Rows: 134 
+Missing values per column:
+depth_m       N  qu_kPa 
+      0       0       0 
+Fully duplicated rows: 4 
+Duplicated rows (kept in the data; check whether they are genuine repeats):
+# A tibble: 8 × 3
+  depth_m     N qu_kPa
+    <dbl> <dbl>  <dbl>
+1    17.0     6   88.4
+2    17.0     6   88.4
+3    12.4    14  114. 
+4    15.4     5   60.8
+5    20.4     6   89.9
+6    20.4     6   89.9
+7    12.4    14  114. 
+8    15.4     5   60.8
+
+--- Summary ---
+# A tibble: 3 × 8
+  Variable                 n Missing  Mean    SD   Min Median   Max
+  <fct>                <int>   <int> <dbl> <dbl> <dbl>  <dbl> <dbl>
+1 Depth (m)              134       0  11.5  7.46  1.95   9.45  61.4
+2 SPT-N (blows/300 mm)   134       0  10.1  7.57  2      8     41  
+3 qu (kPa)               134       0 119.  93.2  22.5   92.9  589. 
+
+The clean dataset has 134 samples (as expected), 0 missing values and 4 duplicated rows.
+Depth (m) ranges from 1.95 to 61.45 (mean 11.47).
+SPT-N (blows/300 mm) ranges from 2 to 41 (mean 10.12).
+qu (kPa) ranges from 22.53 to 589.49 (mean 118.97).
+Saved data/clean.rds and outputs/tables/Table4_1_data_summary.csv
+
+
+==================== R/02_descriptive.R ====================
+
+Summary: 20 of 20 packages are loaded and ready.
+
+--- Table 4.2: descriptive statistics ---
+             Variable   n   Mean Median    SD CV_pct   Min    Max    Q1     Q3
+            Depth (m) 134  11.47   9.45  7.46  65.07  1.95  61.45  7.20  13.95
+ SPT-N (blows/300 mm) 134  10.12   8.00  7.57  74.79  2.00  41.00  4.50  13.00
+             qu (kPa) 134 118.97  92.89 93.23  78.37 22.53 589.49 59.02 132.75
+ Skewness Kurtosis_excess
+     2.91           14.57
+     1.53            2.32
+     2.23            6.21
+
+Summary (n = 134):
+- Depth (m): median 9.45, mean 11.47, CV 65.07%; the distribution is strongly right skewed (skewness 2.91, excess kurtosis 14.57).
+- SPT-N (blows/300 mm): median 8, mean 10.12, CV 74.79%; the distribution is strongly right skewed (skewness 1.53, excess kurtosis 2.32).
+- qu (kPa): median 92.89, mean 118.97, CV 78.37%; the distribution is strongly right skewed (skewness 2.23, excess kurtosis 6.21).
+- With depth: Spearman rho = 0.33 for SPT-N and 0.30 for qu (see Fig 4.2b).
+Saved Table4_2_descriptive.csv, Fig4_1_histograms.png, Fig4_2_boxplots.png, Fig4_2b_depth_profiles.png
+
+
+==================== R/03_normality.R ====================
+
+Summary: 20 of 20 packages are loaded and ready.
+
+--- Table 4.3: Shapiro-Wilk normality tests ---
+             Variable   n      W  p_value normal_at_5pct
+            Depth (m) 134 0.7690 3.00e-13             No
+ SPT-N (blows/300 mm) 134 0.8429 1.21e-10             No
+             qu (kPa) 134 0.7681 2.83e-13             No
+             ln SPT-N 134 0.9781 2.94e-02             No
+                ln qu 134 0.9806 5.29e-02            Yes
+
+Summary:
+- Depth (m): W = 0.769, p = <1e-04 -> not normal at 5%.
+- SPT-N (blows/300 mm): W = 0.843, p = <1e-04 -> not normal at 5%.
+- qu (kPa): W = 0.768, p = <1e-04 -> not normal at 5%.
+- ln SPT-N: W = 0.978, p = 0.0294 -> not normal at 5%.
+- ln qu: W = 0.981, p = 0.0529 -> consistent with a normal distribution at 5%.
+
+Outlier fences (1.5 IQR): Depth -2.92 to 24.07 m; N -8.25 to 25.75; qu -51.57 to 243.34 kPa.
+16 of 134 samples are outliers in at least one variable (Depth: 4, N: 9, qu: 12). They are flagged only, not removed.
+
+ sample_id depth_m    N qu_kPa outlier_in
+         7   37.95 10.0 126.18      Depth
+         9   26.70 13.5 124.34      Depth
+        10   61.45 26.5 162.14   Depth, N
+        11   32.70 26.5 170.28   Depth, N
+        21    7.95  8.0 268.80         qu
+        49   14.70 18.0 253.79         qu
+        66   13.95 28.0 289.96      N, qu
+        72    5.70 21.5 282.47         qu
+        77   23.45 19.0 250.00         qu
+        88   12.45 21.0 251.71         qu
+       103   22.45 26.0 258.61      N, qu
+       123    9.20 29.0 401.02      N, qu
+       128    9.20 28.0 406.11      N, qu
+       132    9.20 34.0 460.17      N, qu
+       133    9.20 33.5 434.77      N, qu
+       134    9.20 41.0 589.49      N, qu
+
+Saved Table4_3_normality.csv, Table4_3b_outliers.csv, Fig4_3_qq_plots.png
+
+
+==================== R/04_correlation.R ====================
+
+Summary: 20 of 20 packages are loaded and ready.
+
+--- Table 4.4: correlations (n = 134) ---
+           Variable_1           Variable_2   n Pearson_r    Pearson_CI95
+            Depth (m) SPT-N (blows/300 mm) 134     0.335  0.175 to 0.477
+            Depth (m)             qu (kPa) 134     0.164 -0.005 to 0.325
+ SPT-N (blows/300 mm)             qu (kPa) 134     0.912  0.878 to 0.937
+ Pearson_p Spearman_rho Spearman_p
+  7.65e-05        0.325   1.25e-04
+  5.77e-02        0.295   5.30e-04
+  7.65e-53        0.892   1.86e-47
+
+Summary:
+- Depth (m) vs SPT-N (blows/300 mm): Pearson r = 0.34 (moderate, p = <1e-04), Spearman rho = 0.32 (moderate, p = 0.000125).
+- Depth (m) vs qu (kPa): Pearson r = 0.16 (weak, p = 0.0577), Spearman rho = 0.29 (weak, p = 0.00053).
+- SPT-N (blows/300 mm) vs qu (kPa): Pearson r = 0.91 (very strong, p = <1e-04), Spearman rho = 0.89 (very strong, p = <1e-04).
+Strength bands: <0.1 negligible, 0.1-0.3 weak, 0.3-0.5 moderate, 0.5-0.7 strong, >=0.7 very strong.
+Saved Table4_4_correlation.csv, Fig4_4_correlation_heatmap.png, Fig4_5_scatter_matrix.png
+
+
+==================== R/05_simple_models.R ====================
+
+Summary: 20 of 20 packages are loaded and ready.
+
+--- Table 4.5: model comparison (statistics on the qu scale, n = 134) ---
+                Model                          Equation     R2 Adj_R2  RMSE
+           (a) Linear             qu = 5.320 + 11.235 N 0.8312 0.8299 38.16
+   (b) Through origin                     qu = 11.573 N 0.8300 0.8300 38.29
+       (c) Polynomial qu = 34.413 + 5.539 N + 0.179 N^2 0.8550 0.8527 35.37
+      (d) Logarithmic     qu = -104.064 + 107.793 ln(N) 0.6550 0.6524 54.56
+ (e1) Power (log-log)               qu = 16.919 N^0.833 0.7830 0.7814 43.27
+     (e2) Power (nls)               qu = 10.674 N^1.028 0.8305 0.8293 38.24
+   MAE     AIC     BIC
+ 25.79 1362.27 1370.96
+ 26.30 1361.20 1366.99
+ 23.68 1343.96 1355.56
+ 37.03 1458.07 1466.77
+ 27.22 1395.92 1404.62
+ 26.46 1362.81 1371.50
+
+F tests:
+                Model F_statistic F_p_value                         F_basis
+           (a) Linear      650.08  7.65e-53                        qu scale
+   (b) Through origin     1933.45  4.24e-81 qu scale, H0: K = 0 (uncentred)
+       (c) Polynomial      386.08  1.20e-55                        qu scale
+      (d) Logarithmic      250.61  2.67e-32                        qu scale
+ (e1) Power (log-log)      498.41  1.19e-46                    ln(qu) scale
+     (e2) Power (nls)      646.95  9.97e-53           qu scale, approximate
+
+--- Table 4.5b: Breusch-Pagan test ---
+                Model BP_statistic df  p_value constant_variance_at_5pct
+           (a) Linear       24.853  1 6.19e-07                        No
+ (e1) Power (log-log)        0.703  1 4.02e-01                       Yes
+
+Summary:
+- Lowest AIC: (c) Polynomial | lowest RMSE: (c) Polynomial 
+- Breusch-Pagan on the linear model: p = <1e-04 -> residual spread changes with N (heteroscedastic).
+- Breusch-Pagan on the log-log model: p = 0.402 -> no evidence of changing variance.
+Saved Table4_5_model_comparison.csv, Table4_5b_breusch_pagan.csv, Fig4_6_simple_models.png
+
+
+==================== R/06_multiple_regression.R ====================
+
+Summary: 20 of 20 packages are loaded and ready.
+
+--- Table 4.6: coefficients (ordinary and HC3 robust) ---
+                   Model      Term Estimate SE_OLS    p_OLS  SE_HC3    p_HC3
+                 qu = KN         N  11.5732 0.2632 4.24e-81  0.4533 4.07e-53
+                  qu ~ N Intercept   5.3201 5.5588 3.40e-01  7.1443 4.58e-01
+                  qu ~ N         N  11.2351 0.4406 7.65e-53  0.8696 3.44e-25
+          qu ~ N + depth Intercept  21.4376 6.3236 9.24e-04  8.5128 1.30e-02
+          qu ~ N + depth         N  11.8901 0.4372 1.00e-55  0.7312 3.17e-33
+          qu ~ N + depth     Depth  -1.9830 0.4432 1.65e-05  0.7738 1.15e-02
+          qu ~ N * depth Intercept -11.5227 9.6110 2.33e-01 12.7886 3.69e-01
+          qu ~ N * depth         N  14.0894 0.6502 5.56e-45  1.5111 3.82e-16
+          qu ~ N * depth     Depth   1.1935 0.8391 1.57e-01  1.0868 2.74e-01
+          qu ~ N * depth N x Depth  -0.1908 0.0438 2.65e-05  0.1141 9.68e-02
+            ln qu ~ ln N Intercept   2.8284 0.0814 2.94e-68  0.0898 2.80e-63
+            ln qu ~ ln N      ln N   0.8326 0.0373 1.19e-46  0.0401 1.96e-43
+ ln qu ~ ln N + ln depth Intercept   2.9273 0.1170 1.00e-51  0.1253 1.53e-48
+ ln qu ~ ln N + ln depth      ln N   0.8500 0.0401 3.32e-44  0.0415 1.13e-42
+ ln qu ~ ln N + ln depth  ln Depth  -0.0591 0.0503 2.42e-01  0.0495 2.34e-01
+ CI95_low_HC3 CI95_high_HC3
+      10.6767       12.4698
+      -8.8121       19.4523
+       9.5149       12.9553
+       4.5972       38.2780
+      10.4437       13.3366
+      -3.5138       -0.4523
+     -36.8234       13.7781
+      11.0999       17.0789
+      -0.9567        3.3437
+      -0.4165        0.0349
+       2.6509        3.0060
+       0.7534        0.9119
+       2.6794        3.1753
+       0.7679        0.9321
+      -0.1569        0.0387
+
+--- Table 4.6b: fit (qu scale unless stated) ---
+                   Model R2_own_scale  R2_qu Adj_R2_qu RMSE_qu  AIC_qu  BIC_qu
+                 qu = KN       0.9356 0.8300    0.8300   38.29 1361.20 1366.99
+                  qu ~ N       0.8312 0.8312    0.8299   38.16 1362.27 1370.96
+          qu ~ N + depth       0.8536 0.8536    0.8514   35.54 1345.22 1356.81
+          qu ~ N * depth       0.8722 0.8722    0.8693   33.20 1328.95 1343.44
+            ln qu ~ ln N       0.7906 0.7830    0.7814   43.27 1395.92 1404.62
+ ln qu ~ ln N + ln depth       0.7928 0.7995    0.7964   41.59 1387.37 1398.96
+     BP_p
+ 4.12e-06
+ 6.19e-07
+ 3.45e-03
+ 7.68e-02
+ 4.02e-01
+ 3.36e-01
+
+--- Table 4.6c: VIF ---
+                    Model                Term   VIF
+           qu ~ N + depth                   N 1.126
+           qu ~ N + depth               Depth 1.126
+ qu ~ N * depth (centred)         N (centred) 1.126
+ qu ~ N * depth (centred)     Depth (centred) 1.660
+ qu ~ N * depth (centred) N x Depth (centred) 1.536
+  ln qu ~ ln N + ln depth                ln N 1.157
+  ln qu ~ ln N + ln depth            ln Depth 1.157
+
+--- Table 4.7: nested F tests ---
+                         Comparison df_added  F_OLS    p_OLS F_HC3  p_HC3
+                Add depth to qu ~ N        1 20.015 1.65e-05 6.567 0.0115
+  Add depth and N x depth to qu ~ N        2 20.876 1.37e-08 1.964 0.1440
+    Add N x depth to qu ~ N + depth        1 18.989 2.65e-05 2.797 0.0968
+ Add intercept and depth to qu = KN        2 10.531 5.74e-05 3.789 0.0251
+       Add ln depth to ln qu ~ ln N        1  1.381 2.42e-01 1.428 0.2340
+ significant_at_5pct_HC3
+                     Yes
+                      No
+                      No
+                     Yes
+                      No
+
+Summary:
+- Add depth to qu ~ N: ordinary F p = <1e-04, robust HC3 p = 0.0115 -> significant improvement.
+- Add depth and N x depth to qu ~ N: ordinary F p = <1e-04, robust HC3 p = 0.144 -> no significant improvement.
+- Add N x depth to qu ~ N + depth: ordinary F p = <1e-04, robust HC3 p = 0.0968 -> no significant improvement.
+- Add intercept and depth to qu = KN: ordinary F p = <1e-04, robust HC3 p = 0.0251 -> significant improvement.
+- Add ln depth to ln qu ~ ln N: ordinary F p = 0.242, robust HC3 p = 0.234 -> no significant improvement.
+- Largest VIF = 1.66 (values below 5 mean collinearity is not a concern).
+Saved Table4_6_mlr_coefficients.csv, Table4_6b_mlr_fit.csv, Table4_6c_vif.csv, Table4_7_nested_F_test.csv
+
+
+==================== R/07_diagnostics.R ====================
+
+Summary: 20 of 20 packages are loaded and ready.
+
+--- Table 4.7c: diagnostic tests ---
+        Model BP_statistic     BP_p DW_statistic    DW_p n_cooks_above_cutoff
+      qu = KN       21.209 4.12e-06        1.413 0.00032                   11
+ ln qu ~ ln N        0.703 4.02e-01        1.832 0.15300                   13
+ constant_variance_at_5pct no_autocorrelation_at_5pct
+                        No                         No
+                       Yes                        Yes
+
+--- Table 4.7d: influential points (Cook's D > 4/n = 0.0299 ) ---
+        Model sample_id depth_m    N qu_kPa std_resid leverage  cooks
+ ln qu ~ ln N        15    4.20  3.0  87.67    2.4529   0.0219 0.0674
+ ln qu ~ ln N       134    9.20 41.0 589.49    1.5623   0.0490 0.0628
+ ln qu ~ ln N       118    6.95  4.0  22.53   -2.9038   0.0146 0.0625
+ ln qu ~ ln N       121    8.45  4.0  24.18   -2.6673   0.0146 0.0528
+ ln qu ~ ln N        21    7.95  8.0 268.80    3.4474   0.0075 0.0447
+ ln qu ~ ln N        24    1.95  2.0  47.08    1.5100   0.0365 0.0432
+ ln qu ~ ln N        28   12.95  2.0  46.84    1.4927   0.0365 0.0422
+ ln qu ~ ln N        68    9.45  3.0  23.80   -1.9260   0.0219 0.0416
+ ln qu ~ ln N        63    9.45  2.0  46.38    1.4593   0.0365 0.0404
+ ln qu ~ ln N        10   61.45 26.5 162.14   -1.5804   0.0299 0.0384
+ ln qu ~ ln N       132    9.20 34.0 460.17    1.2439   0.0400 0.0323
+ ln qu ~ ln N        11   32.70 26.5 170.28   -1.4152   0.0299 0.0308
+ ln qu ~ ln N       128    9.20 28.0 406.11    1.3625   0.0319 0.0306
+      qu = KN       134    9.20 41.0 589.49    3.1171   0.0788 0.8315
+      qu = KN        10   61.45 26.5 162.14   -3.8244   0.0329 0.4981
+      qu = KN        11   32.70 26.5 170.28   -3.6090   0.0329 0.4435
+      qu = KN       132    9.20 34.0 460.17    1.7839   0.0542 0.1824
+      qu = KN       128    9.20 28.0 406.11    2.1754   0.0368 0.1806
+      qu = KN       123    9.20 29.0 401.02    1.7360   0.0394 0.1237
+      qu = KN       133    9.20 33.5 434.77    1.2581   0.0526 0.0879
+      qu = KN         6   22.20 18.5 134.76   -2.0811   0.0160 0.0706
+      qu = KN        21    7.95  8.0 268.80    4.5916   0.0030 0.0635
+      qu = KN       103   22.45 26.0 258.61   -1.1183   0.0317 0.0409
+      qu = KN        66   13.95 28.0 289.96   -0.9037   0.0368 0.0312
+
+--- Table 4.7b: sensitivity of K in qu = KN ---
+                                 Case   n      K K_CI95_low_HC3 K_CI95_high_HC3
+                      (1) All samples 134 11.573         10.677          12.470
+        (2) Without 4 duplicated rows 130 11.593         10.687          12.499
+ (3) Without 5 stiff samples (9.20 m) 129 10.763          9.973          11.553
+           (4) Without Cook's D > 4/n 123 11.317         10.747          11.887
+ SE_HC3     R2   RMSE K_change_pct
+  0.453 0.8300 38.292        0.000
+  0.458 0.8319 38.570        0.172
+  0.399 0.7094 34.692       -7.000
+  0.288 0.8064 26.282       -2.214
+
+Summary:
+- qu = KN: Breusch-Pagan p = <1e-04 (spread changes with N); Durbin-Watson = 1.41, p = 0.00032 (residuals autocorrelated in file order); 11 points above the Cook's cut-off.
+- ln qu ~ ln N: Breusch-Pagan p = 0.402 (constant spread); Durbin-Watson = 1.83, p = 0.153 (no autocorrelation); 13 points above the Cook's cut-off.
+- K ranges from 10.76 to 11.59 kPa per blow across the four cases (largest change 7.0% from the full-data value of 11.57).
+- Every refitted K lies inside the full-data robust 95% CI, so K is stable.
+Saved Fig4_7a_diagnostics_KN.png, Fig4_7b_diagnostics_loglog.png, Table4_7b_sensitivity.csv, Table4_7c_diagnostic_tests.csv, Table4_7d_influential_points.csv
+
+
+==================== R/08_validation.R ====================
+
+Summary: 20 of 20 packages are loaded and ready.
+
+--- Table 4.8: repeated 10-fold CV (10 x 10 = 100 folds, qu scale) ---
+              Model n_folds RMSE_mean RMSE_SD MAE_mean MAE_SD R2_mean  R2_SD
+            qu = KN     100     37.43   11.71    26.74   6.89  0.7015 0.2643
+             Linear     100     37.80   12.01    26.44   7.00  0.7040 0.2565
+         Polynomial     100     34.67   12.06    24.56   6.51  0.7291 0.2540
+        Power (nls)     100     38.36   12.43    27.34   7.05  0.6880 0.2782
+ Log-log (smearing)     100     40.37   14.17    27.55   7.80  0.7166 0.1807
+ RMSE_diff_vs_KN pct_folds_better_than_KN rank_RMSE
+            0.00                        0         2
+            0.37                       59         3
+           -2.76                       64         1
+            0.93                       34         4
+            2.94                       50         5
+
+--- Table 4.8b: 70/30 train/test split (n train = 93 , n test = 41 ) ---
+              Model         Set  n  RMSE   MAE     R2
+            qu = KN Train (70%) 93 36.16 25.20 0.8656
+            qu = KN  Test (30%) 41 44.60 29.46 0.6587
+             Linear Train (70%) 93 36.15 25.07 0.8657
+             Linear  Test (30%) 41 44.43 29.36 0.6613
+         Polynomial Train (70%) 93 32.58 22.73 0.8909
+         Polynomial  Test (30%) 41 42.57 25.14 0.6892
+        Power (nls) Train (70%) 93 35.84 25.55 0.8679
+        Power (nls)  Test (30%) 41 45.18 29.24 0.6499
+ Log-log (smearing) Train (70%) 93 39.24 26.04 0.8417
+ Log-log (smearing)  Test (30%) 41 41.21 28.34 0.7087
+
+--- Table 4.8c: K in qu = KN ---
+                                Method      K    SE CI95_low CI95_high
+ Bootstrap percentile (2000 resamples) 11.573 0.441   10.657    12.355
+                            HC3 robust 11.573 0.453   10.677    12.470
+                          Ordinary OLS 11.573 0.263   11.053    12.094
+
+Share of out-of-fold predictions within +/-30% of measured qu:
+              Model pct_within_30
+            qu = KN          70.1
+             Linear          70.9
+         Polynomial          76.9
+        Power (nls)          68.7
+ Log-log (smearing)          69.4
+
+Summary:
+- Lowest mean CV RMSE: Polynomial (34.67 kPa). Spread of mean CV RMSE across models: 34.67 to 40.37 kPa.
+- Fold-to-fold SD of RMSE is about 12 kPa; on the same folds, Polynomial beats qu = KN in 64% of folds (mean RMSE difference -2.76 kPa).
+- 70/30 split: K fitted on the training set = 12.134; test RMSE for qu = KN = 44.60 kPa.
+- Bootstrap 95% percentile CI for K: 10.66 to 12.36 (HC3: 10.68 to 12.47).
+- 96% of samples fall inside the log-log 95% prediction band.
+Saved Table4_8_cv_results.csv, Table4_8b_train_test_split.csv, Table4_8c_bootstrap_K.csv, Fig4_8_predicted_vs_measured.png, Fig4_9_KN_bands.png
+
+
+==================== R/09_published_comparison.R ====================
+
+Summary: 20 of 20 packages are loaded and ready.
+
+--- Table 4.9: published correlations vs measured qu (n = 134) ---
+                             Correlation   qu_equation   n   RMSE    MAE
+                              This study   qu = 11.57N 134  38.29  26.30
+                  Terzaghi & Peck (1967)   qu = 12.50N 134  40.04  27.03
+                  Stroud (1974), PI < 20   qu = 13.00N 134  42.31  28.09
+        Sivrikaya & Togrol (2002), clays    qu = 9.50N 134  46.37  31.89
+                 Stroud (1974), PI 20-30    qu = 9.00N 134  50.20  34.59
+ Sivrikaya & Togrol (2002), fine-grained    qu = 8.90N 134  51.02  35.16
+                  Stroud (1974), PI > 30    qu = 8.40N 134  55.40  38.19
+                     Sowers (1979), 7.5N   qu = 15.00N 134  57.75  39.72
+                    Sowers (1979), 3.75N    qu = 7.50N 134  64.08  44.79
+           Serajuddin & Chowdhury (1998)   qu = 16.80N 134  76.25  55.76
+            Sanglerat (1972), silty clay   qu = 20.00N 134 112.99  85.73
+                            Nixon (1982)   qu = 24.00N 134 161.37 125.19
+                  Sanglerat (1972), clay   qu = 25.00N 134 173.65 135.14
+                    Sowers (1979), 12.5N   qu = 25.00N 134 173.65 135.14
+                      Hara et al. (1971) qu = 58N^0.72 134 191.82 173.47
+ mean_bias mean_pct_error median_ratio_pred_meas pct_within_30 rank
+     -1.90           1.78                  0.945         70.15    1
+      7.48           9.93                  1.021         67.91    2
+     12.53          14.33                  1.062         64.18    3
+    -22.87         -16.45                  0.776         59.70    4
+    -27.93         -20.85                  0.735         50.75    5
+    -28.94         -21.73                  0.727         50.00    6
+    -34.00         -26.13                  0.686         43.28    7
+     32.76          31.91                  1.225         52.24    8
+    -43.10         -34.04                  0.613         29.10    9
+     50.97          47.74                  1.372         41.04   10
+     83.34          75.89                  1.634         14.18   11
+    123.81         111.06                  1.961          8.21   12
+    133.92         119.86                  2.042          6.72   13
+    133.92         119.86                  2.042          6.72   14
+    173.33         185.15                  2.702          0.75   15
+
+Summary:
+- Closest published correlation: Terzaghi & Peck (1967) (qu = 12.50N), RMSE 40.0 kPa, mean bias +7.5 kPa, median predicted/measured 1.02.
+- Serajuddin & Chowdhury (1998) over-predicts by 51.0 kPa on average (mean % error +47.7%, median ratio 1.37).
+- 'This study' is fitted to the same data, so its errors are in-sample (its 10-fold CV RMSE is in Table 4.8).
+Saved Table4_9_published_comparison.csv, Fig4_10_published_correlations.png, Fig4_11_published_measured_vs_predicted.png
+
+
+==================== R/10_study_area_map.R ====================
+
+Summary: 20 of 20 packages are loaded and ready.
+Loading required namespace: raster
+
+--- Fig 3.1: study area ---
+             project n_sites
+    Aga Khan Academy       2
+ 100 ft Khal project       2
+          MRT Line 6      14
+
+Summary:
+- 18 locations mapped: 14 MRT Line 6 stations from Uttara to Motijheel, plus 4 sites in the east and north-east of Dhaka.
+- Approximate coordinates (please check): Kawlar, Ashkona, Purbachal, 300 ft road 
+- Project assignment of the non-MRT sites is assumed; edit the `sites` table if it is wrong.
+Saved outputs/figures/Fig3_1_study_area.png
+
+
+==================== Run summary ====================
+                      script seconds
+                R/01_clean.R     4.3
+          R/02_descriptive.R     1.5
+            R/03_normality.R     0.7
+          R/04_correlation.R     1.8
+        R/05_simple_models.R     0.6
+  R/06_multiple_regression.R     0.2
+          R/07_diagnostics.R     2.3
+           R/08_validation.R     3.9
+ R/09_published_comparison.R     1.7
+       R/10_study_area_map.R    15.3
+
+All 10 scripts ran without error in 32 seconds.
+Tables: 18 | Figures: 14 
+Saved outputs/sessionInfo.txt

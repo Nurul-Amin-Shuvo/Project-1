@@ -219,3 +219,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 .Rproj.user
+
+# Cached basemap tiles (re-downloaded by R/10_study_area_map.R)
+data/map_tiles/

@@ -121,6 +121,8 @@ fig4_10 <- ggplot() +
   scale_colour_manual(values = line_cols, name = NULL) +
   scale_linetype_manual(values = line_ltys, name = NULL) +
   scale_linewidth_manual(values = line_wds, name = NULL) +
+  guides(fill = guide_legend(order = 1), colour = guide_legend(order = 2),
+         linetype = guide_legend(order = 2), linewidth = guide_legend(order = 2)) +
   labs(x = "SPT-N (blows/300 mm)", y = "qu (kPa)",
        caption = "Su-based correlations converted with qu = 2Su; applied to field SPT-N.") +
   theme(legend.position = "right", legend.key.width = unit(1.4, "cm"),

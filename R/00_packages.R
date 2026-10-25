@@ -12,11 +12,15 @@ if (is.null(getOption("repos")) || getOption("repos")[["CRAN"]] == "@CRAN@") {
 packages <- c(
   "tidyverse", "janitor", "psych", "moments", "car", "lmtest",
   "corrplot", "GGally", "caret", "rsample", "boot", "broom",
-  "knitr", "flextable", "officer", "sandwich", "patchwork", "ggrepel"
+  "knitr", "flextable", "officer", "sandwich", "patchwork", "ggrepel",
+  "sf", "ggspatial"
 )
 
+# Needed by ggspatial map tiles but not loaded, because raster masks dplyr::select
+install_only <- c("rosm", "prettymapr", "raster")
+
 # Install any packages that are not already installed
-missing <- packages[!packages %in% rownames(installed.packages())]
+missing <- setdiff(c(packages, install_only), rownames(installed.packages()))
 if (length(missing) > 0) {
   message("Installing missing packages: ", paste(missing, collapse = ", "))
   install.packages(missing, dependencies = TRUE)

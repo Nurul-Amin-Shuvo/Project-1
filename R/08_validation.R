@@ -211,6 +211,7 @@ fig4_9 <- ggplot(bands, aes(N)) +
   scale_fill_manual(values = c("95% prediction band (log-log model)" = "grey88",
                                "95% confidence band (HC3)" = "grey55")) +
   scale_linetype_manual(values = "solid") +
+  guides(fill = guide_legend(order = 1), linetype = guide_legend(order = 2)) +
   labs(x = "SPT-N (blows/300 mm)", y = "qu (kPa)", fill = NULL, linetype = NULL,
        caption = sprintf("%.0f%% of the %d samples lie inside the prediction band.",
                          coverage, nrow(clean))) +

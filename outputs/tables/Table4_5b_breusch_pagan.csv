@@ -1,0 +1,3 @@
+Model,BP_statistic,df,p_value,constant_variance_at_5pct
+(a) Linear,24.853,1,6.19e-7,No
+(e1) Power (log-log),0.703,1,0.402,Yes

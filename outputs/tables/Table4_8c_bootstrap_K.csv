@@ -1,0 +1,4 @@
+Method,K,SE,CI95_low,CI95_high
+Bootstrap percentile (2000 resamples),11.573,0.441,10.657,12.355
+HC3 robust,11.573,0.453,10.677,12.47
+Ordinary OLS,11.573,0.263,11.053,12.094

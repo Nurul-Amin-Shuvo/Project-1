@@ -1,0 +1,6 @@
+Model,n_folds,RMSE_mean,RMSE_SD,MAE_mean,MAE_SD,R2_mean,R2_SD,RMSE_diff_vs_KN,pct_folds_better_than_KN,rank_RMSE
+qu = KN,100,37.43,11.71,26.74,6.89,0.7015,0.2643,0,0,2
+Linear,100,37.8,12.01,26.44,7,0.704,0.2565,0.37,59,3
+Polynomial,100,34.67,12.06,24.56,6.51,0.7291,0.254,-2.76,64,1
+Power (nls),100,38.36,12.43,27.34,7.05,0.688,0.2782,0.93,34,4
+Log-log (smearing),100,40.37,14.17,27.55,7.8,0.7166,0.1807,2.94,50,5

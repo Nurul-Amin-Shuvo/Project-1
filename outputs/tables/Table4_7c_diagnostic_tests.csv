@@ -1,0 +1,3 @@
+Model,BP_statistic,BP_p,DW_statistic,DW_p,n_cooks_above_cutoff,constant_variance_at_5pct,no_autocorrelation_at_5pct
+qu = KN,21.209,4.12e-6,1.413,3.2e-4,11,No,No
+ln qu ~ ln N,0.703,0.402,1.832,0.153,13,Yes,Yes

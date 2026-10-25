@@ -12,7 +12,7 @@ if (is.null(getOption("repos")) || getOption("repos")[["CRAN"]] == "@CRAN@") {
 packages <- c(
   "tidyverse", "janitor", "psych", "moments", "car", "lmtest",
   "corrplot", "GGally", "caret", "rsample", "boot", "broom",
-  "knitr", "flextable", "officer", "sandwich"
+  "knitr", "flextable", "officer", "sandwich", "patchwork", "ggrepel"
 )
 
 # Install any packages that are not already installed

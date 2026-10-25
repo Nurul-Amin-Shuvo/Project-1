@@ -1,0 +1,6 @@
+Variable,n,W,p_value,normal_at_5pct
+Depth (m),134,0.769,3e-13,No
+SPT-N (blows/300 mm),134,0.8429,1.21e-10,No
+qu (kPa),134,0.7681,2.83e-13,No
+ln SPT-N,134,0.9781,0.0294,No
+ln qu,134,0.9806,0.0529,Yes

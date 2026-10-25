@@ -2,11 +2,12 @@
 # Study area map (Fig 3.1): sampling locations in Dhaka coloured by project,
 # MRT Line 6 drawn as a line, with north arrow and scale bar.
 #
-# Coordinates are APPROXIMATE (WGS84, decimal degrees) and for illustration only.
-# MRT Line 6 stations are placed at the published station sites; points marked
-# `certain = FALSE` are rough locations and should be checked against the
-# borehole logs before the map is finalised.
-# Project assignment of the non-MRT sites is an assumption - check it.
+# Coordinates are WGS84 decimal degrees, at locality level (not exact boreholes).
+# MRT Line 6 stations are placed at the station sites. Kawlar and Ashkona
+# (Aga Khan Academy project, confirmed) use the OpenStreetMap locality positions
+# in Dakshinkhan. Points marked `certain = FALSE` (Purbachal: OSM locality centre;
+# 300 ft road: a point on the Kuril-Purbachal expressway) and their project
+# assignment still need checking against the borehole logs.
 #
 # Basemap tiles (OpenStreetMap) are downloaded on the first
 # run and cached in data/map_tiles/, so later runs work offline.
@@ -19,9 +20,9 @@ theme_set(theme_bw(base_size = 10, base_family = "Times New Roman"))
 # ---- Locations -------------------------------------------------------------
 sites <- tribble(
   ~site,               ~lat,    ~lon,    ~project,              ~certain,
-  "Kawlar",            23.8570, 90.4180, "Aga Khan Academy",    FALSE,
-  "Ashkona",           23.8625, 90.4235, "Aga Khan Academy",    FALSE,
-  "Purbachal",         23.8400, 90.5000, "100 ft Khal project", FALSE,
+  "Kawlar",            23.8468, 90.4145, "Aga Khan Academy",    TRUE,
+  "Ashkona",           23.8517, 90.4189, "Aga Khan Academy",    TRUE,
+  "Purbachal",         23.8534, 90.5014, "100 ft Khal project", FALSE,
   "300 ft road",       23.8320, 90.4650, "100 ft Khal project", FALSE,
   "Uttara",            23.8693, 90.3673, "MRT Line 6",          TRUE,
   "Pallabi",           23.8265, 90.3643, "MRT Line 6",          TRUE,
@@ -92,7 +93,7 @@ fig3_1 <- ggplot() +
   coord_sf(xlim = c(90.345, 90.520), ylim = c(23.715, 23.885), crs = 4326,
            default_crs = 4326, expand = FALSE) +
   labs(x = "Longitude", y = "Latitude",
-       caption = paste("* Approximate location, to be confirmed.",
+       caption = paste("* Approximate location and project, to be confirmed.",
                        "Basemap: © OpenStreetMap contributors.")) +
   guides(fill = guide_legend(order = 1), linetype = guide_legend(order = 2)) +
   theme(legend.position = "inside", legend.position.inside = c(0.99, 0.02),
@@ -110,7 +111,7 @@ cat("\nSummary:\n")
 cat("- ", nrow(sites), " locations mapped: ",
     sum(sites$project == "MRT Line 6"), " MRT Line 6 stations from Uttara to Motijheel, plus ",
     sum(sites$project != "MRT Line 6"), " sites in the east and north-east of Dhaka.\n", sep = "")
-cat("- Approximate coordinates (please check):",
+cat("- Approximate location and project (please check):",
     paste(sites$site[!sites$certain], collapse = ", "), "\n")
-cat("- Project assignment of the non-MRT sites is assumed; edit the `sites` table if it is wrong.\n")
+cat("- Kawlar and Ashkona confirmed as Aga Khan Academy; edit the `sites` table if it is wrong.\n")
 cat("Saved outputs/figures/Fig3_1_study_area.png\n")

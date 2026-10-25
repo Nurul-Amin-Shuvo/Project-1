@@ -37,9 +37,9 @@ correlations <- tribble(
   "Sowers (1979), 7.5N",                          "Sowers 1979",                  "Sowers",     "Su",      "C = 7.5N",             linear(7.5),
   "Sowers (1979), 12.5N",                         "Sowers 1979",                  "Sowers",     "Su",      "C = 12.5N",            linear(12.5),
   "Nixon (1982)",                                 "Nixon 1982",                   NA,           "Su",      "C = 12N",              linear(12),
-  "Hara et al. (1971)",                           "Hara 1971",                    NA,           "Su",      "Cu = 29N^0.72",        function(N) 29 * N^0.72,
-  "Sivrikaya & Togrol (2002), fine-grained",      "Sivrikaya & Togrol 2002",      NA,           "Su",      "Su = 4.45N",           linear(4.45),
-  "Sivrikaya & Togrol (2002), clays",             "Sivrikaya & Togrol 2002",      NA,           "Su",      "Su = 4.75N",           linear(4.75),
+  "Hara et al. (1974)",                           "Hara 1974",                    NA,           "Su",      "Cu = 29N^0.72",        function(N) 29 * N^0.72,
+  "Sivrikaya & Toğrol (2006), fine-grained",      "Sivrikaya & Toğrol 2006",      NA,           "Su",      "Su = 4.45N",           linear(4.45),
+  "Sivrikaya & Toğrol (2006), clays",             "Sivrikaya & Toğrol 2006",      NA,           "Su",      "Su = 4.75N",           linear(4.75),
   "Serajuddin & Chowdhury (1998)",                "Serajuddin & Chowdhury 1998",  NA,           "qu",      "qu = 16.8N",           linear(16.8),
   "This study",                                   "This study",                   NA,           "qu",      sprintf("qu = %.2fN", K_this_study), linear(K_this_study)
 ) %>%
@@ -69,7 +69,7 @@ table4_9 <- preds %>%
   mutate(qu_equation = map_chr(Correlation, function(cn) {
     r <- correlations[correlations$Correlation == cn, ]
     mult <- if (r$strength == "Su") 2 else 1
-    if (cn == "Hara et al. (1971)") sprintf("qu = %gN^0.72", 29 * mult)
+    if (cn == "Hara et al. (1974)") sprintf("qu = %gN^0.72", 29 * mult)
     else sprintf("qu = %.2fN", r$qu_fun[[1]](1))
   })) %>%
   select(Correlation, original, qu_equation, n, RMSE, MAE, mean_bias,
@@ -99,8 +99,8 @@ bands <- curves %>%
 
 line_levels <- c("This study", "Serajuddin & Chowdhury (1998)", "Terzaghi & Peck (1967)",
                  "Sanglerat (1972), clay", "Sanglerat (1972), silty clay", "Nixon (1982)",
-                 "Hara et al. (1971)", "Sivrikaya & Togrol (2002), fine-grained",
-                 "Sivrikaya & Togrol (2002), clays")
+                 "Hara et al. (1974)", "Sivrikaya & Toğrol (2006), fine-grained",
+                 "Sivrikaya & Toğrol (2006), clays")
 lines <- curves %>%
   filter(is.na(group)) %>%
   mutate(Correlation = factor(Correlation, levels = line_levels))

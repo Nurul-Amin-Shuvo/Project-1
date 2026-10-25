@@ -40,7 +40,7 @@ Reproduce everything with `Rscript R/99_run_all.R` (about 30 s). The R version a
 
 | File | Interpretation |
 |---|---|
-| `Fig3_1_study_area.png` | Map of the 18 locations: 14 MRT Line 6 stations from Uttara to Motijheel, plus Kawlar, Ashkona, Purbachal and the 300 ft road.<br>Points are coloured by project (Aga Khan Academy, 100 ft Khal project, MRT Line 6), and the MRT alignment is drawn as a line.<br>**Check:** the coordinates of the 4 non-MRT sites and their project assignment are approximate assumptions (marked *). |
+| `Fig3_1_study_area.png` | Map of the 18 locations: 14 MRT Line 6 stations from Uttara to Motijheel, plus Kawlar, Ashkona, Purbachal and the 300 ft road.<br>Points are coloured by project (Aga Khan Academy, 100 ft Khal project, MRT Line 6), and the MRT alignment is drawn as a line.<br>Kawlar and Ashkona (Aga Khan Academy, confirmed) are placed at their OpenStreetMap locality positions in Dakshinkhan. **Check:** Purbachal and the 300 ft road (marked *) are approximate, and their project assignment is unconfirmed. |
 | `Fig4_1_histograms.png` | Histograms with density curves for depth, SPT-N and qu.<br>All three are right-skewed, with long upper tails.<br>qu has a secondary peak near 230 kPa and a few values above 400 kPa. |
 | `Fig4_2_boxplots.png` | Boxplots show the mean above the median for all three variables.<br>Outliers sit only on the high side.<br>The qu outliers above 250 kPa are mostly the stiff 9.20 m samples. |
 | `Fig4_2b_depth_profiles.png` | Borehole-log-style profiles of N and qu against depth.<br>Both increase gently down to about 25 m, with large scatter at any given depth. The stiff cluster at 9.20 m stands out.<br>The trend line stops at 25 m because only 4 samples lie deeper. |
@@ -53,10 +53,10 @@ Reproduce everything with `Rscript R/99_run_all.R` (about 30 s). The R version a
 | `Fig4_8_predicted_vs_measured.png` | Out-of-fold CV predictions against measured qu, with 1:1 and ±30% lines.<br>70% of predictions are within ±30% for KN, and 77% for the polynomial.<br>All models predict too low for the highest qu values and too high for deep samples 10 and 11. |
 | `Fig4_9_KN_bands.png` | qu = 11.57N with its robust 95% confidence band and a 95% prediction band from the log-log model.<br>The prediction band widens with N, matching the uneven spread.<br>96% of samples fall inside it, close to the nominal 95%. |
 | `Fig4_10_published_correlations.png` | Published correlations drawn over the data, with Stroud and Sowers as bands.<br>The data follow This study and Terzaghi & Peck, inside the Stroud band.<br>Sanglerat, Nixon and Hara lie far above all the data. |
-| `Fig4_11_published_measured_vs_predicted.png` | Measured vs predicted panels for all 15 correlations, ordered by RMSE.<br>The best panels cluster along the 1:1 line. The Sivrikaya & Togrol and Stroud PI > 30 panels sit below it.<br>Serajuddin & Chowdhury and the worse panels lie consistently above the 1:1 line. |
+| `Fig4_11_published_measured_vs_predicted.png` | Measured vs predicted panels for all 15 correlations, ordered by RMSE.<br>The best panels cluster along the 1:1 line. The Sivrikaya & Toğrol and Stroud PI > 30 panels sit below it.<br>Serajuddin & Chowdhury and the worse panels lie consistently above the 1:1 line. |
 
 ## Caveats
 
 - Published correlation coefficients were used as supplied, without checking them against the original papers. Several were developed with N60, and this data uses field N.
 - No PI data: Stroud and Sowers variants are evaluated separately.
-- Fig 3.1 coordinates for Kawlar, Ashkona, Purbachal and the 300 ft road, and their project assignment, need confirming.
+- Fig 3.1: Purbachal and 300 ft road locations and their project assignment need confirming. All non-MRT points are locality positions, not exact borehole locations.

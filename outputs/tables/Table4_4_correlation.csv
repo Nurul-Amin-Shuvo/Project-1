@@ -1,0 +1,4 @@
+Variable_1,Variable_2,n,Pearson_r,Pearson_CI95,Pearson_p,Spearman_rho,Spearman_p
+Depth (m),SPT-N (blows/300 mm),134,0.335,0.175 to 0.477,7.65e-5,0.325,1.25e-4
+Depth (m),qu (kPa),134,0.164,-0.005 to 0.325,0.0577,0.295,5.3e-4
+SPT-N (blows/300 mm),qu (kPa),134,0.912,0.878 to 0.937,7.65e-53,0.892,1.86e-47

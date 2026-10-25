@@ -1,0 +1,8 @@
+Model,Term,VIF
+qu ~ N + depth,N,1.126
+qu ~ N + depth,Depth,1.126
+qu ~ N * depth (centred),N (centred),1.126
+qu ~ N * depth (centred),Depth (centred),1.66
+qu ~ N * depth (centred),N x Depth (centred),1.536
+ln qu ~ ln N + ln depth,ln N,1.157
+ln qu ~ ln N + ln depth,ln Depth,1.157

@@ -1,0 +1,6 @@
+Comparison,Reduced,Full,df_added,RSS_reduced,RSS_full,F_OLS,p_OLS,F_HC3,p_HC3,significant_at_5pct_HC3
+Add depth to qu ~ N,qu ~ N,qu ~ N + depth,1,195123.31,169262.5,20.015,1.65e-5,6.567,0.0115,Yes
+Add depth and N x depth to qu ~ N,qu ~ N,qu ~ N * depth,2,195123.31,147689.86,20.876,1.37e-8,1.964,0.144,No
+Add N x depth to qu ~ N + depth,qu ~ N + depth,qu ~ N * depth,1,169262.5,147689.86,18.989,2.65e-5,2.797,0.0968,No
+Add intercept and depth to qu = KN,qu = KN,qu ~ N + depth,2,196477.3,169262.5,10.531,5.74e-5,3.789,0.0251,Yes
+Add ln depth to ln qu ~ ln N,ln qu ~ ln N,ln qu ~ ln N + ln depth,1,11.97,11.84,1.381,0.242,1.428,0.234,No
